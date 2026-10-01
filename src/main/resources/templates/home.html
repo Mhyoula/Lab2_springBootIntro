@@ -1,46 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Temperature Converter</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Calculatrice</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div>
-    <h1>Temperature Converter</h1>
-    <div th:switch="${error}">
-        <p th:case="'FahrenheitFormatError'">
-            Wrong value provided for Fahrenheit - must be a number
-        </p>
-        <p th:case="'CelsiusFormatError'">
-            Wrong value provided for Celsius - must be a number
-        </p>
-        <p th:case="'OperationFormatError'">
-            Wrong operation
-        </p>
-    </div>
-    <form th:action="@{/convert}" method="get">
-        <table>
-            <tr>
-                <td><label for="celsius">Celsius:</label></td>
-                <td><input name="celsius"
-                           id="celsius"
-                           th:name="celsius" th:value="${celsius}"></td>
-            </tr>
-            <tr>
-                <td><label for="fahrenheit">Fahrenheit:</label></td>
-                <td><input name="fahrenheit"
-                           id="fahrenheit"
-                           th:name="fahrenheit" th:value="${fahrenheit}"></td>
-            </tr>
-            <tr>
-                <td><button type="submit" th:name="operation" th:value="CtoF">
-                    Celsius to Fahrenheit</button></td>
-                <td><button type="submit" th:name="operation" th:value="FtoC">
-                    Fahrenheit to Celsius</button></td>
-            </tr>
-        </table>
+<main>
+    <h1>Calculatrice</h1>
+    <form th:action="@{/calculate}" method="post">
+        <label for="firstNumber">Premier nombre</label>
+        <input type="number" step="any" id="firstNumber" name="firstNumber"
+               th:value="${firstNumber}" required>
+
+        <label for="secondNumber">Second nombre</label>
+        <input type="number" step="any" id="secondNumber" name="secondNumber"
+               th:value="${secondNumber}" required>
+
+        <label for="operation">Opération</label>
+        <select id="operation" name="operation">
+            <option value="+" th:selected="${operation == '+'}">+ Addition</option>
+            <option value="-" th:selected="${operation == '-'}">− Soustraction</option>
+            <option value="*" th:selected="${operation == '*'}">* Multiplication</option>
+            <option value="/" th:selected="${operation == '/'}">/ Division</option>
+        </select>
+
+        <button type="submit">Calculer</button>
     </form>
-</div>
+    <p class="error" role="alert" th:if="${error != ''}" th:text="${error}"></p>
+    <p class="result" th:if="${result != null}">
+        Résultat : <output th:text="${result}"></output>
+    </p>
+</main>
 </body>
 </html>
